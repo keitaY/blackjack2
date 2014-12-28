@@ -3,6 +3,9 @@ package com.nazunasoft.blackjack2;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import net.nend.android.NendAdIconLayout;
+import net.nend.android.NendAdView;
+
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
 import org.andengine.audio.sound.Sound;
@@ -28,10 +31,14 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 
+import android.app.ActionBar.LayoutParams;
 import android.graphics.Typeface;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 	Sprite[] cards = new Sprite[54];
@@ -43,8 +50,8 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 	int rensyou=0;
 	int who=MainActivity.whoisselected;//0...sora 1...yu 2...rina
 	int nugedo=0;//0...nugetenai 1...itimai nugeteru
-	int dealerY=340;//Y of dealer cards row
-	int guestY=570;//Y of guest cards row
+	int dealerY=330;//Y of dealer cards row
+	int guestY=560;//Y of guest cards row
 	private Text guestscoretxt;
 	private Text dealerscoretxt;
 	private Text rensyoutxt;
@@ -238,6 +245,7 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 			sortChildren();
 		}else if(dealerscore<playerscore){//player win
 			rensyou++;
+			MainActivity.sp.edit().putInt("highscore"+who, rensyou).commit();
 			if(rensyou>3){nugedo=1;}
 			guestscoretxt.setText(pointsolve(field)+" you win!!");
 			rensyoutxt.setText(rensyou+"èüñ⁄ÅI");
@@ -348,7 +356,7 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 	
 	
 	public void preparebuttonsprite(){
-		 final Sprite button = new Sprite(145, 745, (TextureRegion) getBaseActivity().getResourceUtil().getSprite("icons/hold.png").getTextureRegion(), this.getBaseActivity().getVertexBufferObjectManager()){
+		 final Sprite button = new Sprite(145, 736, (TextureRegion) getBaseActivity().getResourceUtil().getSprite("icons/hold.png").getTextureRegion(), this.getBaseActivity().getVertexBufferObjectManager()){
 			   @Override
 			   public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 			    switch (pSceneTouchEvent.getAction()) {
@@ -377,7 +385,6 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 			  attachChild(button);
 			  registerTouchArea(button);
 	}
-	
 	public void prepareBackgrounds(){
 		bg[0] = getBaseActivity().getResourceUtil().getSprite("bg/hanaya.jpg");
 		bg[1] = getBaseActivity().getResourceUtil().getSprite("bg/kyositsu.jpg");
@@ -386,5 +393,6 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 		bg[1].setZIndex(-1);
 		bg[2].setZIndex(-1);
 	}
+	
 	//-------------------------------------------------------------------------------------
 }

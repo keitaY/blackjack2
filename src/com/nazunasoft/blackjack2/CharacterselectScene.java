@@ -34,6 +34,7 @@ public class CharacterselectScene extends KeyListenScene implements IOnSceneTouc
 	int who =0;
 	private Text nametxt;
 	private Text titletxt;
+	private Text scoretxt;
 	private Sound selectsnd;
 	private Sound oksnd;
 	public CharacterselectScene(MultiSceneActivity baseActivity) {
@@ -187,6 +188,12 @@ public class CharacterselectScene extends KeyListenScene implements IOnSceneTouc
 						.getVertexBufferObjectManager());
 		titletxt.setZIndex(3);
 		attachChild(titletxt);
+		
+		scoretxt = new Text(10, 700, font, "", 50,
+				new TextOptions(HorizontalAlign.LEFT), getBaseActivity()
+						.getVertexBufferObjectManager());
+		scoretxt.setZIndex(3);
+		attachChild(scoretxt);
 	}
 	public void setBackgrounds(int w){
 		removeBackgrounds();

@@ -1,5 +1,7 @@
 package com.nazunasoft.blackjack2;
 
+import net.nend.android.NendAdView;
+
 import org.andengine.audio.music.MusicFactory;
 import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.camera.Camera;
@@ -8,9 +10,12 @@ import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 
+import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.LinearLayout;
 
 
 public class MainActivity extends MultiSceneActivity {
@@ -34,8 +39,7 @@ public class MainActivity extends MultiSceneActivity {
 		eo.getAudioOptions().setNeedsMusic(true);
 		return eo;
 	}
-	
-	
+
 	@Override
 	protected Scene onCreateScene() {
 		// MainSceneをインスタンス化し、エンジンにセット
