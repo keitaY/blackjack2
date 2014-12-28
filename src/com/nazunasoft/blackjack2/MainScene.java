@@ -346,6 +346,7 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 		}
 	}
 	
+	
 	public void preparebuttonsprite(){
 		 final Sprite button = new Sprite(145, 745, (TextureRegion) getBaseActivity().getResourceUtil().getSprite("icons/hold.png").getTextureRegion(), this.getBaseActivity().getVertexBufferObjectManager()){
 			   @Override
