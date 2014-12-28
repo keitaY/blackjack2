@@ -40,10 +40,14 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 	private Sound drawsnd;
 	int gamestate=0;//0...initial state 1...having cards(2 or more cards) 2...game over(ready to start)
 	int havecards=0;
-	int dealerY=350;//Y of dealer cards row
-	int guestY=580;//Y of guest cards row
+	int rensyou=0;
+	int who=MainActivity.whoisselected;//0...sora 1...yu 2...rina
+	int nugedo=0;//0...nugetenai 1...itimai nugeteru
+	int dealerY=340;//Y of dealer cards row
+	int guestY=570;//Y of guest cards row
 	private Text guestscoretxt;
 	private Text dealerscoretxt;
+	private Text rensyoutxt;
 	int[] field = new int[5];
 	int[] dealerfield = new int[5];
 	
@@ -60,10 +64,8 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 		preparebuttonsprite();
 		setOnSceneTouchListener(this);
 		//---------------------
-		setBackground(bg[1]);
-		setgirl(girls[0][0][0]);
-		attachChild(guestscoretxt);
-		attachChild(dealerscoretxt);
+		setBackground(bg[who]);
+		setgirl(girls[who][nugedo][0]);
 		sortChildren();
 	}
 	
@@ -100,7 +102,7 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 	public void drawcards(int state){
 		if(state==0||state==2){
 			removeAllcards();
-			setgirl(girls[0][0][0]);
+			setgirl(girls[who][nugedo][0]);
 			setdealercards();
 			field[0] = setcard(0,0);
 			field[1] = setcard(1,0);
@@ -108,6 +110,7 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 			havecards=2;
 			guestscoretxt.setText(pointsolve(field)+"");
 			dealerscoretxt.setText("?");
+			sortChildren();
 			if(isVast(pointsolve(field))==1){gamestate=2;}
 		}else if(state==1){
 			field[havecards] = setcard(havecards,0);
@@ -227,12 +230,18 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 		if(playerscore>21){playerscore=0;}
 		
 		if(dealerscore>playerscore){//---player lose
+			rensyou=0;
+			nugedo=0;
+			rensyoutxt.setText("");
 			guestscoretxt.setText(pointsolve(field)+" you lose...");
-			setgirl(girls[0][0][1]);
+			setgirl(girls[who][nugedo][1]);
 			sortChildren();
 		}else if(dealerscore<playerscore){//player win
+			rensyou++;
+			if(rensyou>3){nugedo=1;}
 			guestscoretxt.setText(pointsolve(field)+" you win!!");
-			setgirl(girls[0][0][2]);
+			rensyoutxt.setText(rensyou+"èüñ⁄ÅI");
+			setgirl(girls[who][nugedo][2]);
 			sortChildren();
 		}else{//push
 			guestscoretxt.setText(pointsolve(field)+" push");
@@ -294,14 +303,22 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 		Font font = new Font(getBaseActivity().getFontManager(), texture, tegaki, 22, true, Color.BLACK);
 		getBaseActivity().getTextureManager().loadTexture(texture);
 		getBaseActivity().getFontManager().loadFont(font);
-		guestscoretxt = new Text(35, guestY-25, font, "test", 50,
+		guestscoretxt = new Text(35, guestY-25, font, "touch to start!", 50,
 				new TextOptions(HorizontalAlign.LEFT), getBaseActivity()
 						.getVertexBufferObjectManager());
-		guestscoretxt.setZIndex(1);
-		dealerscoretxt = new Text(35, dealerY+175, font, "test", 50,
+		guestscoretxt.setZIndex(2);
+		dealerscoretxt = new Text(35, dealerY+175, font, "", 50,
 				new TextOptions(HorizontalAlign.LEFT), getBaseActivity()
 						.getVertexBufferObjectManager());
-		dealerscoretxt.setZIndex(1);
+		dealerscoretxt.setZIndex(2);
+		rensyoutxt = new Text(35, dealerY-25, font, "", 50,
+				new TextOptions(HorizontalAlign.LEFT), getBaseActivity()
+						.getVertexBufferObjectManager());
+		rensyoutxt.setZIndex(2);
+
+		attachChild(guestscoretxt);
+		attachChild(dealerscoretxt);
+		attachChild(rensyoutxt);
 	}
 	
 	public void prepareCards(){
@@ -323,13 +340,14 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 				for(int k=0;k<3;k++){
 				girls[i][j][k] = getBaseActivity().getResourceUtil().getSprite("girls/"+name+(j+1)+"_"+k+".png");	
 				girls[i][j][k].setZIndex(0);
+				if(i==2){girls[i][j][k].setPosition(0,-80);}
 				}
 			}
 		}
 	}
 	
 	public void preparebuttonsprite(){
-		 final Sprite button = new Sprite(150, 750, (TextureRegion) getBaseActivity().getResourceUtil().getSprite("icons/hold.png").getTextureRegion(), this.getBaseActivity().getVertexBufferObjectManager()){
+		 final Sprite button = new Sprite(145, 745, (TextureRegion) getBaseActivity().getResourceUtil().getSprite("icons/hold.png").getTextureRegion(), this.getBaseActivity().getVertexBufferObjectManager()){
 			   @Override
 			   public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 			    switch (pSceneTouchEvent.getAction()) {

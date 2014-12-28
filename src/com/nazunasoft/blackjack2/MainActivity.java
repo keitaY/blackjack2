@@ -18,6 +18,7 @@ public class MainActivity extends MultiSceneActivity {
 	private int CAMERA_WIDTH = 480;
 	private int CAMERA_HEIGHT = 800;
 	static SharedPreferences sp ;
+	public static int whoisselected=0;
 	public EngineOptions onCreateEngineOptions() {
 		// サイズを指定し描画範囲をインスタンス化
 		final Camera camera = new Camera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
@@ -41,8 +42,9 @@ public class MainActivity extends MultiSceneActivity {
 		SoundFactory.setAssetBasePath("mfx/");
 		MusicFactory.setAssetBasePath("mfx/");
 		MainScene mainScene = new MainScene(this);
+		Scene CharacterselectScene = new CharacterselectScene(this);
 		sp =  getSharedPreferences("myprefs",Context.MODE_PRIVATE);
-		return mainScene;
+		return CharacterselectScene;
 	}
 
 	@Override
