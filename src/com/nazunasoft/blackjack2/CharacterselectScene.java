@@ -31,6 +31,7 @@ public class CharacterselectScene extends KeyListenScene implements IOnSceneTouc
 	Sprite[] girls = new Sprite[3];
 	Sprite[] bg = new Sprite[4];
 	Sprite layer;
+	Sprite top;
 	int who =0;
 	private Text nametxt;
 	private Text titletxt;
@@ -82,6 +83,7 @@ public class CharacterselectScene extends KeyListenScene implements IOnSceneTouc
 		prepareBackgrounds();
 		preparebuttonsprite();
 		prepareText();
+		preparetop();
 		showgirl(who);
 		sortChildren();
 		setOnSceneTouchListener(this);
@@ -220,6 +222,37 @@ public class CharacterselectScene extends KeyListenScene implements IOnSceneTouc
 		layer.setZIndex(2);
 		layer.setPosition(0,0);
 		attachChild(layer);
+	}
+	public void preparetop(){
+		  top = new Sprite(0, 0, (TextureRegion) getBaseActivity().getResourceUtil().getSprite("bg/topbgr.png").getTextureRegion(), this.getBaseActivity().getVertexBufferObjectManager()){
+			   @Override
+			   public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+			    switch (pSceneTouchEvent.getAction()) {
+			    case TouchEvent.ACTION_DOWN:
+			        Log.d("TouchEvent", "getAction()" + "ACTION_DOWN");
+			        oksnd.play();
+					top.registerEntityModifier(new FadeOutModifier(0.12f));
+					top.registerEntityModifier(new MoveXModifier(
+							0.12f, top.getX(), top.getX()-20));
+			        break;
+			    case TouchEvent.ACTION_UP:
+			        Log.d("TouchEvent", "getAction()" + "ACTION_UP");
+			        top.setY(-400);
+					if(top.hasParent()){top.detachSelf();}
+			        break;
+			    case TouchEvent.ACTION_MOVE:
+			        Log.d("TouchEvent", "getAction()" + "ACTION_MOVE");
+			        break;
+			    case TouchEvent.ACTION_CANCEL:
+			        Log.d("TouchEvent", "getAction()" + "ACTION_CANCEL");
+			        break;
+			    }
+			    return true;
+			   }
+			  };
+			  top.setZIndex(5);
+			  registerTouchArea(top);
+				attachChild(top);
 	}
 	
 

@@ -1,10 +1,6 @@
 package com.nazunasoft.blackjack2;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
-import net.nend.android.NendAdIconLayout;
-import net.nend.android.NendAdView;
 
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
@@ -16,7 +12,6 @@ import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
@@ -31,14 +26,11 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 
-import android.app.ActionBar.LayoutParams;
 import android.graphics.Typeface;
 
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 	Sprite[] cards = new Sprite[54];
@@ -50,8 +42,8 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 	int rensyou=0;
 	int who=MainActivity.whoisselected;//0...sora 1...yu 2...rina
 	int nugedo=0;//0...nugetenai 1...itimai nugeteru
-	int dealerY=330;//Y of dealer cards row
-	int guestY=560;//Y of guest cards row
+	int dealerY=310;//Y of dealer cards row
+	int guestY=540;//Y of guest cards row
 	private Text guestscoretxt;
 	private Text dealerscoretxt;
 	private Text rensyoutxt;
@@ -356,7 +348,7 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 	
 	
 	public void preparebuttonsprite(){
-		 final Sprite button = new Sprite(145, 736, (TextureRegion) getBaseActivity().getResourceUtil().getSprite("icons/hold.png").getTextureRegion(), this.getBaseActivity().getVertexBufferObjectManager()){
+		 final Sprite button = new Sprite(145, guestY+176, (TextureRegion) getBaseActivity().getResourceUtil().getSprite("icons/hold.png").getTextureRegion(), this.getBaseActivity().getVertexBufferObjectManager()){
 			   @Override
 			   public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 			    switch (pSceneTouchEvent.getAction()) {
