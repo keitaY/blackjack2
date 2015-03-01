@@ -2,12 +2,10 @@ package com.nazunasoft.blackjack2;
 
 import java.io.IOException;
 
-import org.andengine.audio.music.Music;
-import org.andengine.audio.music.MusicFactory;
 import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
+import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.modifier.FadeInModifier;
-import org.andengine.entity.modifier.FadeOutModifier;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
@@ -19,17 +17,12 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.Texture;
 import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.ui.activity.BaseGameActivity;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
-
 import android.graphics.Typeface;
-
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 
 public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
@@ -49,6 +42,7 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 	private Text rensyoutxt;
 	int[] field = new int[5];
 	int[] dealerfield = new int[5];
+	Sprite button = null;
 	
 	public MainScene(MultiSceneActivity baseActivity){
 		super(baseActivity);
@@ -70,8 +64,8 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 	
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		float x = pSceneTouchEvent.getX();
-		float y = pSceneTouchEvent.getY();
+	//	float x = pSceneTouchEvent.getX();
+	//	float y = pSceneTouchEvent.getY();
 	    switch (pSceneTouchEvent.getAction()) {
 	    case TouchEvent.ACTION_DOWN:
 	        Log.d("TouchEvent", "getAction()" + "ACTION_DOWN");
@@ -348,33 +342,28 @@ public class MainScene extends KeyListenScene implements IOnSceneTouchListener {
 	
 	
 	public void preparebuttonsprite(){
-		 final Sprite button = new Sprite(145, guestY+176, (TextureRegion) getBaseActivity().getResourceUtil().getSprite("icons/hold.png").getTextureRegion(), this.getBaseActivity().getVertexBufferObjectManager()){
+		 button = new Sprite(380, guestY+84, (TextureRegion) getBaseActivity().getResourceUtil().getSprite("icons/hold.png").getTextureRegion(), this.getBaseActivity().getVertexBufferObjectManager()){
 			   @Override
 			   public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+				if(gamestate==1){
 			    switch (pSceneTouchEvent.getAction()) {
-			    case TouchEvent.ACTION_DOWN:
-			        Log.d("TouchEvent", "getAction()" + "ACTION_DOWN");
-			        if(gamestate==1){
-				    gamestate=2;
-				    gameover();
-				    drawsnd.play();
-			        }
+			    	case TouchEvent.ACTION_DOWN:
+			    		button.registerEntityModifier(new ColorModifier(0.1f, new Color(1.0f, 1.0f, 1.0f), new Color(0.5f, 0.5f, 0.5f)));
 			        break;
-			    case TouchEvent.ACTION_UP:
-			        Log.d("TouchEvent", "getAction()" + "ACTION_UP");
+			    	case TouchEvent.ACTION_UP:
+			    		button.registerEntityModifier(new ColorModifier(0.1f,  new Color(0.5f, 0.5f, 0.5f), new Color(1.0f, 1.0f, 1.0f)));
+			    		gamestate=2;
+			    		gameover();
+			    		drawsnd.play();
 			        break;
-			    case TouchEvent.ACTION_MOVE:
-			        Log.d("TouchEvent", "getAction()" + "ACTION_MOVE");
-			        break;
-			    case TouchEvent.ACTION_CANCEL:
-			        Log.d("TouchEvent", "getAction()" + "ACTION_CANCEL");
-			        break;
-			    }
+			    	}
+			    }  
 			    return true;
 			   }
 			  };
-			  button.setZIndex(0);
+			  button.setZIndex(1);
 			  attachChild(button);
+			  button.setScale(0.8f);
 			  registerTouchArea(button);
 	}
 	public void prepareBackgrounds(){

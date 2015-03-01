@@ -4,10 +4,14 @@ import java.io.IOException;
 
 import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
+import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.modifier.FadeOutModifier;
+import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.MoveYModifier;
+import org.andengine.entity.modifier.ParallelEntityModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
@@ -32,6 +36,7 @@ public class CharacterselectScene extends KeyListenScene implements IOnSceneTouc
 	Sprite[] bg = new Sprite[4];
 	Sprite layer;
 	Sprite top;
+	Sprite button;
 	int who =0;
 	private Text nametxt;
 	private Text titletxt;
@@ -106,23 +111,19 @@ public class CharacterselectScene extends KeyListenScene implements IOnSceneTouc
 	}
 	
 	public void preparebuttonsprite(){
-		 final Sprite button = new Sprite(400, 220, (TextureRegion) getBaseActivity().getResourceUtil().getSprite("icons/point.png").getTextureRegion(), this.getBaseActivity().getVertexBufferObjectManager()){
+		 button = new Sprite(380, 220, (TextureRegion) getBaseActivity().getResourceUtil().getSprite("icons/point.png").getTextureRegion(), this.getBaseActivity().getVertexBufferObjectManager()){
 			   @Override
 			   public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 			    switch (pSceneTouchEvent.getAction()) {
 			    case TouchEvent.ACTION_DOWN:
 			        Log.d("TouchEvent", "getAction()" + "ACTION_DOWN");
-			        selectsnd.play();
-			        showgirl(who);
+		    //		button.registerEntityModifier(new ColorModifier(0.1f, new Color(1.0f, 1.0f, 1.0f), new Color(0.5f, 0.5f, 0.5f)));
 			        break;
 			    case TouchEvent.ACTION_UP:
+			        selectsnd.play();
+			        showgirl(who);
+		   // 		button.registerEntityModifier(new ColorModifier(0.1f, new Color(0.5f, 0.5f, 0.5f), new Color(1.0f, 1.0f, 1.0f)));
 			        Log.d("TouchEvent", "getAction()" + "ACTION_UP");
-			        break;
-			    case TouchEvent.ACTION_MOVE:
-			        Log.d("TouchEvent", "getAction()" + "ACTION_MOVE");
-			        break;
-			    case TouchEvent.ACTION_CANCEL:
-			        Log.d("TouchEvent", "getAction()" + "ACTION_CANCEL");
 			        break;
 			    }
 			    return true;
@@ -130,6 +131,17 @@ public class CharacterselectScene extends KeyListenScene implements IOnSceneTouc
 			  };
 			  attachChild(button);
 			  button.setZIndex(4);
+	    	  button.registerEntityModifier(
+	    				new LoopEntityModifier(
+	    						new SequenceEntityModifier(
+	    								new FadeInModifier(0.01f),
+	    								new ParallelEntityModifier(
+	    										new MoveXModifier(0.4f, button.getX(), button.getX()+30),
+	    										new FadeOutModifier(0.4f)
+	    										)
+										)
+	    						,-1)
+	    				);
 			  registerTouchArea(button);
 	}
 	
